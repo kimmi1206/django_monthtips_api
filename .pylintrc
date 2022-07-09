@@ -1,0 +1,9 @@
+[MASTER]
+ignore=
+	challenges/views,
+[MESSAGES CONTROL]
+disable=
+	# ignore missing docstring.
+	missing-docstring,
+    # ignore no members
+    no-member,
