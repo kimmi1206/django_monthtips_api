@@ -7,3 +7,8 @@ disable=
 	missing-docstring,
     # ignore no members
     no-member,
+	# ignore unused arguments
+	; unused-argument
+	# ignore bare except
+	; bare-except
+
