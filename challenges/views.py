@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
+from django.http import Http404, HttpResponseRedirect, HttpResponseNotFound
 from django.urls import reverse
-from django.template.loader import render_to_string
+# from django.template.loader import render_to_string
 
 
 months = {'january': "january data",
@@ -12,8 +12,10 @@ months = {'january': "january data",
           'june': "june data",
           'july': "july data",
           'august': "august data",
-          'september': "september data",
-          'october': "october data",
+          #   'september': "september data",
+          #   'october': "october data",
+          'september': None,
+          'october': None,
           'november': "november data",
           'december': "december data", }
 
@@ -22,17 +24,11 @@ months = {'january': "january data",
 
 
 def index(request):
-    list_items = ""
     months_list = list(months.keys())
 
-    for month in months_list:
-        capitalized_month = month.capitalize()
-        month_path = reverse("month-challenge", args=[month])
-        list_items += f"<li><a href=\"{month_path}\">{capitalized_month}</a></li>"
-
-    response_data = f"<h1><ul>{list_items}</ul></h1>"
-
-    return HttpResponse(response_data)
+    return render(request, "challenges/index.html", {
+        "months": months_list
+    })
 
 
 def monthly_challenge_by_number(request, month):
@@ -52,7 +48,9 @@ def monthly_challenge(request, month):
         challenge_text = months[month]
         return render(request, "challenges/challenge.html", {
             "text": challenge_text,
-            "item": month.capitalize(),
+            "month_name": month,
         })
-    except KeyError:
-        return HttpResponseNotFound(f"<h2>Month *{month}* is Not supported</h2>")
+    except KeyError as exc:
+        # response_data = render_to_string("404.html")
+        # return HttpResponseNotFound(response_data)
+        raise Http404() from exc
